@@ -1,5 +1,11 @@
 import React from 'react';
 import { useLoaderData, useParams } from 'react-router';
+import { addToStoreDB, addWishListToStoreDB } from '../../Utilities/Utilities';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
+
 
 const BookDetails = () => {
     const { id } = useParams()
@@ -11,12 +17,30 @@ const BookDetails = () => {
 
     const { bookName, author, image, review, totalPages, rating, category, tags, publisher, yearOfPublishing } = singleBook
 
+    const handelMarkAsRead = (id) => {
+        addToStoreDB(id)
+        MySwal.fire({
+            title: "Successfully Added",
+            icon: "success",
+            draggable: true
+        });
+
+    }
+    const handelAddToWishList = (id) => {
+        addWishListToStoreDB(id)
+        MySwal.fire({
+            title: "Successfully Added",
+            icon: "success",
+            draggable: true
+        });
+    }
+
     return (
         <div className="flex flex-col md:flex-row items-center bg-white rounded-xl border-1 border-[#0000001a] shadow-md p-6 max-w-[1000px] mx-auto gap-14 mt-9 md:mt-13 mb-6 md:mb-10">
             {/* Book Image */}
             <div className="flex-shrink-0 bg-[#00000009] p-12 rounded-xl">
                 <img
-                    src={image} 
+                    src={image}
                     alt="Book Cover"
                     className="w-64 rounded-lg shadow"
                 />
@@ -48,11 +72,11 @@ const BookDetails = () => {
 
                 {/* Buttons */}
                 <div className="flex gap-3">
-                    <button className="bg-gray-200 text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-800 hover:text-white transition">
-                       Mark as Read
+                    <button onClick={() => handelMarkAsRead(id)} className="bg-gray-200 text-black px-5 py-2 rounded-lg font-medium hover:bg-gray-800 hover:text-white transition">
+                        Mark as Read
                     </button>
-                    <button className="bg-sky-100 text-sky-800 px-5 py-2 rounded-lg font-medium hover:bg-sky-200 transition">
-                       Add to Wishlist
+                    <button onClick={() => handelAddToWishList(id)} className="bg-sky-100 text-sky-800 px-5 py-2 rounded-lg font-medium hover:bg-sky-200 transition">
+                        Add to Wishlist
                     </button>
                 </div>
             </div>
